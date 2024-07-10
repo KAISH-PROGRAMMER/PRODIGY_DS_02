@@ -1,0 +1,72 @@
+Step 1: Load the Dataset
+
+import pandas as pd
+# Load the Titanic dataset
+url = 'https://web.stanford.edu/class/archive/cs/cs109/cs109.1166/stuff/titanic.csv'
+titanic_df = pd.read_csv(url)
+# Display the first few rows of the dataset
+print(titanic_df.head())
+
+Step 2: Data Cleaning
+1.Handling Missing Values
+# Check for missing values
+print(titanic_df.isnull().sum())
+
+# Fill missing Age values with the median age
+titanic_df['Age'].fillna(titanic_df['Age'].median(), inplace=True)
+
+# Fill missing Embarked values with the mode
+titanic_df['Embarked'].fillna(titanic_df['Embarked'].mode()[0], inplace=True)
+
+# Drop the Cabin column as it has too many missing values
+titanic_df.drop(columns=['Cabin'], inplace=True)
+
+2.Correcting Data Types
+# Convert data types if necessary
+titanic_df['Survived'] = titanic_df['Survived'].astype(int)
+titanic_df['Pclass'] = titanic_df['Pclass'].astype(int)
+
+3.Removing Duplicates
+# Drop duplicates if any
+titanic_df.drop_duplicates(inplace=True)
+
+4.Addressing Outliers
+# Check for outliers in the Fare column
+print(titanic_df['Fare'].describe())
+
+Step 3: Exploratory Data Analysis (EDA)
+1. Descriptive Statistics
+# Summary statistics
+print(titanic_df.describe())
+
+2.Data Visualization
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+# Plot the distribution of ages
+sns.histplot(titanic_df['Age'], kde=True)
+plt.title('Age Distribution')
+plt.show()
+
+# Plot survival rates by passenger class
+sns.barplot(x='Pclass', y='Survived', data=titanic_df)
+plt.title('Survival Rate by Passenger Class')
+plt.show()
+
+# Plot survival rates by gender
+sns.barplot(x='Sex', y='Survived', data=titanic_df)
+plt.title('Survival Rate by Gender')
+plt.show()
+
+3.Identifying Relationships
+# Pairplot to explore relationships between numerical variables
+sns.pairplot(titanic_df[['Survived', 'Age', 'Fare', 'Pclass']])
+plt.show()
+# Heatmap to visualize correlations
+corr = titanic_df.corr()
+sns.heatmap(corr, annot=True, cmap='coolwarm')
+plt.title('Correlation Matrix')
+plt.show()
+
+
+
